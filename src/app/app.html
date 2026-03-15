@@ -1,0 +1,79 @@
+<nav class="topnav" style="position: relative;">
+  <div class="brand">
+    <!-- <img class="company-logo" src="assets/companyName.jpeg" alt="Sri Venkateswara Capital Services" /> -->
+    <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap;">Sri Venkateswara Capital Services</span>
+  </div>
+  <div class="nav-actions">
+    <a class="nav-link" href="#" (click)="toggleAbout($event)">About</a>
+    <a class="nav-link" href="#contact">Get a Quote</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="overlay">
+    <h1>Simple loans for life and business</h1>
+    <p>Personal and business financing built for you — fast approval, flexible terms.</p>
+
+    <a class="cta" href="#contact">Get a Quote</a>
+
+    <div class="offerings">
+      <div class="offering">
+        <h2>Personal Loans</h2>
+        <p>Flexible terms to cover education, healthcare, travel, and more.</p>
+      </div>
+      <div class="offering">
+        <h2>Business Loans</h2>
+        <p>Support working capital, expansion, and equipment financing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="showAbout" class="about">
+  <div class="about-content">
+    <img class="about-image" src="assets/company_image.jpeg" alt="Sri Venkateswara Capital Services" />
+    <div class="about-text">
+      <h2>About Sri Venkateswara Capital Services</h2>
+      <p>
+        We provide fast, flexible loan solutions tailored for individuals and businesses.
+        Our goal is to make borrowing simple and transparent.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="contact-card">
+    <h2>Get a Quote</h2>
+    <p>Tell us what you need, and we’ll reach out with an offer.</p>
+    <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+      <label>
+        Full name
+        <input required type="text" placeholder="Your name" />
+      </label>
+      <label>
+        Email
+        <input required type="email" placeholder="you@example.com" />
+      </label>
+      <label>
+        Loan type
+        <select required>
+          <option value="">Select</option>
+          <option value="personal">Personal</option>
+          <option value="business">Business</option>
+        </select>
+      </label>
+      <label>
+        Amount (approx.)
+        <input required type="text" placeholder="e.g. 50,000" />
+      </label>
+      <button class="btn" type="submit">Send request</button>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© 2026 Sri Venkateswara Capital Services. All rights reserved.</p>
+</footer>
+
+
