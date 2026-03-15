@@ -1,0 +1,23 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:}
+    password: ${EMAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+contact:
+  email:
+    to: bheemesh707@gmail.com
+
+admin:
+  username: ${ADMIN_USERNAME:Bheemesh}
+  password: ${ADMIN_PASSWORD:Pass@123}
+  # optional: path where the request log file is stored (relative to the backend root)
+  log-file: data/requests.xlsx
+  # optional: where the admin credentials are stored (will be created automatically)
+  credentials-file: data/admin-credentials.json

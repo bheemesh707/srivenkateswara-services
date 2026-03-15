@@ -22,18 +22,6 @@ body {
   justify-content: center;
 }
 
-.hero::before {
-  content: 'S';
-  position: absolute;
-  top: 50%;
-  left: 49%;
-  transform: translate(-50%, -50%);
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 0 12px rgba(0, 0, 0, 0.55);
-  z-index: 1;
-}
 
 .overlay {
   position: relative;
@@ -106,7 +94,73 @@ body {
   margin-top: 0;
 }
 
+.admin {
+  padding: 60px 20px;
+  background: #f1f4f8;
+}
+
+.admin-card {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.admin-login label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.admin-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.admin-table th {
+  background: rgba(15, 76, 129, 0.08);
+}
+
+.admin-error {
+  color: #b00020;
+}
+
+.admin-success {
+  color: #0b7000;
+  margin-top: 8px;
+}
+
+.admin-credentials {
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid rgba(15, 76, 129, 0.2);
+  border-radius: 10px;
+  background: rgba(15, 76, 129, 0.04);
+}
+
+.admin-credentials label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.admin-credentials input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+}
+
 .about-image {
+  width: 30%;
   max-width: 100%;
   height: auto;
   border-radius: 12px;
