@@ -1,22 +1,23 @@
 <nav class="topnav" style="position: relative;">
   <div class="brand">
-    <!-- <img class="company-logo" src="assets/companyName.jpeg" alt="Sri Venkateswara Capital Services" /> -->
+    <img style="height:60px; width:auto;"  class="company-logo" src="assets/companyName.jpeg" alt="Sri Venkateswara Capital Services" />
     <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap;">Sri Venkateswara Capital Services</span>
   </div>
   <div class="nav-actions">
     <a class="nav-link" href="#" (click)="toggleAbout($event)">About</a>
     <a class="nav-link" href="#contact">Get a Quote</a>
+    <a class="nav-link" href="#" (click)="toggleAdmin($event)">Admin</a>
   </div>
 </nav>
 
 <section class="hero">
-  <div class="overlay">
-    <h1>Simple loans for life and business</h1>
-    <p>Personal and business financing built for you — fast approval, flexible terms.</p>
+  <!-- <div class="overlay"> -->
+    <!-- <h1>Simple loans for life and business</h1>
+    <p>Personal and business financing built for you — fast approval, flexible terms.</p> -->
 
-    <a class="cta" href="#contact">Get a Quote</a>
+     <!-- <a class="cta" href="#contact">Get a Quote</a>  -->
 
-    <div class="offerings">
+    <!-- <div class="offerings">
       <div class="offering">
         <h2>Personal Loans</h2>
         <p>Flexible terms to cover education, healthcare, travel, and more.</p>
@@ -25,13 +26,13 @@
         <h2>Business Loans</h2>
         <p>Support working capital, expansion, and equipment financing.</p>
       </div>
-    </div>
-  </div>
+    </div> -->
+  <!-- </div> -->
 </section>
 
 <section *ngIf="showAbout" class="about">
   <div class="about-content">
-    <img class="about-image" src="assets/company_image.jpeg" alt="Sri Venkateswara Capital Services" />
+    <img class="about-image" src="assets/companyName.jpeg" alt="Sri Venkateswara Capital Services" />
     <div class="about-text">
       <h2>About Sri Venkateswara Capital Services</h2>
       <p>
@@ -46,18 +47,34 @@
   <div class="contact-card">
     <h2>Get a Quote</h2>
     <p>Tell us what you need, and we’ll reach out with an offer.</p>
-    <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+    <form
+      class="contact-form"
+      (submit)="
+        sendRequest(
+          $event,
+          name.value,
+          email.value,
+          phone.value,
+          loanType.value,
+          amount.value
+        )
+      "
+    >
       <label>
         Full name
-        <input required type="text" placeholder="Your name" />
+        <input #name required type="text" placeholder="Your name" />
       </label>
       <label>
         Email
-        <input required type="email" placeholder="you@example.com" />
+        <input #email required type="email" placeholder="you@example.com" />
+      </label>
+      <label>
+        Phone number
+        <input #phone required type="tel" placeholder="e.g. +1 555 123 4567" />
       </label>
       <label>
         Loan type
-        <select required>
+        <select #loanType required>
           <option value="">Select</option>
           <option value="personal">Personal</option>
           <option value="business">Business</option>
@@ -65,10 +82,75 @@
       </label>
       <label>
         Amount (approx.)
-        <input required type="text" placeholder="e.g. 50,000" />
+        <input #amount required type="text" placeholder="e.g. 50,000" />
       </label>
       <button class="btn" type="submit">Send request</button>
     </form>
+  </div>
+</section>
+
+<section *ngIf="adminOpen" class="admin">
+  <div class="admin-card">
+    <h2>Admin - Request Log</h2>
+
+    <div *ngIf="!adminLoggedIn" class="admin-login">
+      <p>Enter admin username and password to view the request log.</p>
+      <label>
+        Username
+        <input #adminUsername type="text" placeholder="Admin username" />
+      </label>
+      <label>
+        Password
+        <input #adminPassword type="password" placeholder="Admin password" />
+      </label>
+      <button class="btn" (click)="loginAdmin(adminUsername.value, adminPassword.value)">View log</button>
+      <p *ngIf="adminError" class="admin-error">{{ adminError }}</p>
+    </div>
+
+    <div *ngIf="adminLoggedIn" class="admin-table">
+      <button class="btn" (click)="logoutAdmin()">Logout</button>
+
+      <div class="admin-credentials">
+        <h3>Change admin username / password</h3>
+        <label>
+          New username
+          <input [(ngModel)]="adminNewUsername" type="text" placeholder="New username" />
+        </label>
+        <label>
+          New password
+          <input [(ngModel)]="adminNewPassword" type="password" placeholder="New password" />
+        </label>
+        <label>
+          Confirm password
+          <input [(ngModel)]="adminConfirmPassword" type="password" placeholder="Confirm password" />
+        </label>
+        <button class="btn" (click)="changeAdminCredentials()">Update credentials</button>
+        <p *ngIf="adminSuccess" class="admin-success">{{ adminSuccess }}</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Loan type</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of adminRequests">
+            <td>{{ row.timestamp }}</td>
+            <td>{{ row.fullName }}</td>
+            <td>{{ row.email }}</td>
+            <td>{{ row.phone }}</td>
+            <td>{{ row.loanType }}</td>
+            <td>{{ row.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
