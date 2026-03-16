@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { contactApiUrl } from './app.config';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-root',
@@ -22,6 +24,7 @@ export class App {
     timestamp: string;
     fullName: string;
     email: string;
+    phone: string;
     loanType: string;
     amount: string;
   }> = [];
@@ -54,35 +57,45 @@ export class App {
     });
   }
 
-  async loginAdmin(username: string, password: string) {
-    if (!username || !password) {
-      this.adminError = 'Username and password are required.';
-      return;
-    }
 
-    const encoded = btoa(`${username}:${password}`);
-    this.adminError = '';
 
-    try {
-      const res = await fetch('/api/admin/requests/list', {
-        method: 'GET',
-        headers: { Authorization: `Basic ${encoded}` },
-      });
-
-      if (!res.ok) {
-        throw new Error(`Status ${res.status}`);
-      }
-
-      this.adminRequests = await res.json();
-      this.adminLoggedIn = true;
-      this.adminToken = encoded;
-      this.adminSuccess = '';
-    } catch (err) {
-      this.adminLoggedIn = false;
-      this.adminError = 'Invalid credentials or failed to retrieve requests.';
-      console.error(err);
-    }
+async loginAdmin(username: string, password: string) {
+  if (!username || !password) {
+    this.adminError = 'Username and password are required.';
+    return;
   }
+
+  // For now, just check against hardcoded credentials
+  if (username === 'admin' && password === 'admin123') {
+    this.adminLoggedIn = true;
+    this.adminError = '';
+    this.adminSuccess = 'Login successful!';
+
+    // When admin logs in, allow download of the saved Excel file
+    this.downloadRequestsExcel();
+  } else {
+    this.adminLoggedIn = false;
+    this.adminError = 'Invalid credentials.';
+  }
+}
+
+// Helper function to download the Excel file
+downloadRequestsExcel() {
+  // Example: if you stored requests in memory as an array
+  const requests = [
+    { fullName: 'John Doe', email: 'john@example.com', phone: '123-456-7890', loanType: 'Home', amount: '500000' },
+    { fullName: 'Jane Smith', email: 'jane@example.com', phone: '098-765-4321', loanType: 'Car', amount: '300000' }
+    // ... add more from your saved state
+  ];
+
+  // Convert to worksheet
+  const worksheet = XLSX.utils.json_to_sheet(requests);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Requests');
+
+  // Trigger download
+  XLSX.writeFile(workbook, 'requests.xlsx');
+}
 
   async changeAdminCredentials() {
     if (!this.adminNewUsername || !this.adminNewPassword) {
@@ -134,37 +147,73 @@ export class App {
     this.adminError = '';
   }
 
-  async sendRequest(
-    event: Event,
-    fullName: string,
-    email: string,
-    loanType: string,
-    amount: string
-  ) {
-    event.preventDefault();
+async sendRequest(
+  event: Event,
+  fullName: string,
+  email: string,
+  phone: string,
+  loanType: string,
+  amount: string
+) {
+  event.preventDefault();
 
-    const payload = {
-      fullName,
-      email,
-      loanType,
-      amount,
-    };
+  const payload = { fullName, email, phone, loanType, amount };
 
-    try {
-      const res = await fetch(contactApiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+  try {
+    // Normally you'd send to backend here
+    // const res = await fetch(contactApiUrl, {...});
 
-      if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`);
-      }
+    // Instead, generate Excel file locally
+    const data = [
+      ['Full Name', 'Email', 'Phone', 'Loan Type', 'Amount'],
+      [payload.fullName, payload.email, payload.phone, payload.loanType, payload.amount]
+    ];
 
-      alert('Request sent! We will reach out soon.');
-    } catch (error) {
-      console.error(error);
-      alert('Something went wrong sending your request. Please try again later.');
-    }
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Requests');
+
+    // Trigger download
+    XLSX.writeFile(workbook, 'request.xlsx');
+
+    alert('Request sent successfully, our customer executive will be contacting you.');
+  } catch (error) {
+    console.error(error);
+    alert('Something went wrong saving your request.');
   }
+}
+
+// async sendRequest(
+//     event: Event,
+//     fullName: string,
+//     email: string,
+//     loanType: string,
+//     amount: string
+//   ) {
+//     event.preventDefault();
+
+//     const payload = {
+//       fullName,
+//       email,
+//       loanType,
+//       amount,
+//     };
+
+//     try {
+//       const res = await fetch(contactApiUrl, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) {
+//         throw new Error(`Server returned ${res.status}`);
+//       }
+
+//       alert('Request sent! We will reach out soon.');
+//     } catch (error) {
+//       console.e  rror(error);
+//       alert('Something went wrong sending your request. Please try again later.');
+//     }
+//   }
 }

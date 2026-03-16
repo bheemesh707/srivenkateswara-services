@@ -1,6 +1,6 @@
 <nav class="topnav" style="position: relative;">
   <div class="brand">
-    <!-- <img class="company-logo" src="assets/companyName.jpeg" alt="Sri Venkateswara Capital Services" /> -->
+    <img style="height:60px; width:auto;"  class="company-logo" src="assets/companyName.jpeg" alt="Sri Venkateswara Capital Services" />
     <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap;">Sri Venkateswara Capital Services</span>
   </div>
   <div class="nav-actions">
@@ -54,6 +54,7 @@
           $event,
           name.value,
           email.value,
+          phone.value,
           loanType.value,
           amount.value
         )
@@ -66,6 +67,10 @@
       <label>
         Email
         <input #email required type="email" placeholder="you@example.com" />
+      </label>
+      <label>
+        Phone number
+        <input #phone required type="tel" placeholder="e.g. +1 555 123 4567" />
       </label>
       <label>
         Loan type
@@ -129,6 +134,7 @@
             <th>Timestamp</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Phone number</th>
             <th>Loan type</th>
             <th>Amount</th>
           </tr>
@@ -138,6 +144,7 @@
             <td>{{ row.timestamp }}</td>
             <td>{{ row.fullName }}</td>
             <td>{{ row.email }}</td>
+            <td>{{ row.phone }}</td>
             <td>{{ row.loanType }}</td>
             <td>{{ row.amount }}</td>
           </tr>
